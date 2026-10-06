@@ -11,3 +11,4 @@ certs/
 *.p12
 *.key
 .DS_Store
+*.jfr
