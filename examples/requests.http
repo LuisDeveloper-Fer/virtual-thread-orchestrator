@@ -1,0 +1,4 @@
+POST http://localhost:8086/api/quotes
+Content-Type: application/json
+
+{"mode":"VIRTUAL","scenario":"SUCCESS","providers":6}

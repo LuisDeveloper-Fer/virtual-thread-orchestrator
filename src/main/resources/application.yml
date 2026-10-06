@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: virtual-thread-orchestrator
+  threads:
+    virtual:
+      enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+provider:
+  url: ${PROVIDER_URL:http://localhost:9096}
+  deadline-ms: 1500
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        quotes.batch.duration: true
+server:
+  port: ${PORT:8080}
+  shutdown: graceful
