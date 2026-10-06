@@ -31,7 +31,7 @@ public class QuoteService {
   public static class CapacityException extends RuntimeException {}
 
   private final ExecutorService virtual = Executors.newVirtualThreadPerTaskExecutor();
-  private final ExecutorService platform =
+  private final ThreadPoolExecutor platform =
       new ThreadPoolExecutor(8, 8, 0, TimeUnit.SECONDS, new ArrayBlockingQueue<>(96));
   private final Semaphore admission = new Semaphore(8), downstream = new Semaphore(8, true);
   private final HttpClient client =
@@ -94,6 +94,7 @@ public class QuoteService {
           f -> {
             if (!f.isDone()) f.cancel(true);
           });
+      platform.purge();
       admission.release();
       metrics
           .timer("quotes.batch.duration", "mode", mode.name())
