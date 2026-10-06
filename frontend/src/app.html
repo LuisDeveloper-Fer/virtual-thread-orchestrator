@@ -1,0 +1,171 @@
+@if(demo){
+<aside class="notice">
+  <strong>Demo interactiva · simulación en navegador</strong
+  ><span>La animación explica el flujo. No ejecuta ni mide hilos Java.</span>
+</aside>
+}
+<header>
+  <a href="#" class="brand">trama<span>✳</span></a>
+  <nav>
+    <a href="#laboratorio">Probar</a><a href="#idea">La idea</a
+    ><a href="https://github.com/LuisDeveloper-Fer/virtual-thread-orchestrator"
+      >Código ↗</a
+    >
+  </nav>
+  <span class="edition">ESTUDIO DE CONCURRENCIA / 07</span>
+</header>
+<main>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">JAVA 21 · VIRTUAL THREADS</p>
+      <h1>Menos espera.<br /><em>Más caminos.</em></h1>
+      <p class="intro">
+        Una consulta sale al encuentro de varios proveedores. Cada camino tiene
+        su tiempo. Todos comparten un límite.
+      </p>
+      <a class="button" href="#laboratorio"
+        >Explora el recorrido <span>↗</span></a
+      >
+      <div class="byline">
+        Un proyecto de Luis <span>Backend Developer / Java</span>
+      </div>
+    </div>
+    <div
+      class="illustration"
+      aria-label="Una consulta se divide en tres proveedores y vuelve a reunirse"
+    >
+      <div class="paper rear"></div>
+      <div class="paper">
+        <span class="paper-label">UNA CONSULTA, VARIOS DESTINOS</span>
+        <div class="source">Tu solicitud <span>↗</span></div>
+        <div class="branches">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="providers">
+          <span>01<br /><small>Atlas</small></span
+          ><span>02<br /><small>Sur</small></span
+          ><span>03<br /><small>Brisa</small></span>
+        </div>
+        <div class="merge"></div>
+        <div class="receipt">Resultados reunidos <b>✓</b></div>
+        <p>El tiempo es compartido.<br />La capacidad, también.</p>
+      </div>
+      <span class="seal">I/O<br /><small>EN PARALELO</small></span>
+    </div>
+  </section>
+  <section id="idea" class="principles">
+    <article>
+      <span>01 / ESPERAR</span>
+      <h2>Un hilo por tarea.</h2>
+      <p>
+        El código conserva su lectura secuencial mientras espera respuestas de
+        red.
+      </p>
+    </article>
+    <article>
+      <span>02 / PROTEGER</span>
+      <h2>Capacidad finita.</h2>
+      <p>
+        Hasta ocho llamadas externas a la vez. Los recursos siguen necesitando
+        límites.
+      </p>
+    </article>
+    <article>
+      <span>03 / TERMINAR</span>
+      <h2>Un plazo común.</h2>
+      <p>Los resultados llegan juntos. Lo que supera el plazo se cancela.</p>
+    </article>
+  </section>
+  <section id="laboratorio" class="lab">
+    <div class="section-title">
+      <p class="eyebrow">PRUÉBALO A TU RITMO</p>
+      <h2>Traza tu consulta.</h2>
+      <p>
+        {{demo?'Explora los estados. Para medir Java, ejecuta el repositorio
+        localmente.':'Resultados medidos por la API Java conectada a esta
+        interfaz.'}}
+      </p>
+    </div>
+    <div class="lab-grid">
+      <form (ngSubmit)="run()">
+        <label
+          >Tipo de hilo<select name="mode" [(ngModel)]="mode">
+            <option value="VIRTUAL">Virtual · Java 21</option>
+            <option value="PLATFORM">Plataforma · pool de 8</option>
+          </select></label
+        ><label
+          >Comportamiento del proveedor<select
+            name="scenario"
+            [(ngModel)]="scenario"
+          >
+            <option value="SUCCESS">Responde correctamente</option>
+            <option value="SLOW">Responde tarde</option>
+            <option value="ERROR">Devuelve HTTP 500</option>
+            <option value="NEVER">No responde</option>
+          </select></label
+        ><label
+          >Proveedores a consultar<input
+            name="providers"
+            type="number"
+            min="1"
+            max="12"
+            [(ngModel)]="providers" /></label
+        ><button class="button" [disabled]="busy()">
+          {{busy()?'Consultando…':'Iniciar recorrido'}} <span>↗</span>
+        </button>
+        <p class="fine">8 llamadas simultáneas · deadline 1,5 s en Java</p>
+      </form>
+      <div class="results" aria-live="polite">
+        @if(error()){
+        <p class="error" role="alert">{{error()}}</p>
+        }@if(busy()){
+        <div class="waiting">
+          Reuniendo respuestas<span class="loading">···</span>
+        </div>
+        }@else if(result();as batch){
+        <div class="result-heading">
+          <h3>{{demo?'Recorrido simulado':'Consulta completada'}}</h3>
+          <span>{{demo?'Sin medición Java':batch.elapsedMs+' ms'}}</span>
+        </div>
+        <ul>
+          @for(row of batch.results;track row.provider){
+          <li>
+            <span>Proveedor {{row.provider+1}}</span
+            ><strong [class.failed]="row.status!=='SUCCESS'"
+              >{{row.status==='SUCCESS'?'Respuesta
+              recibida':row.status==='HTTP_ERROR'?'Error del proveedor':'Plazo
+              agotado'}}</strong
+            >
+          </li>
+          }
+        </ul>
+        <details>
+          <summary>Detalle {{demo?'de la simulación':'de la API'}}</summary>
+          <pre>{{batch|json}}</pre>
+        </details>
+        }@else{<span class="empty-icon">↗</span>
+        <h3>Todo empieza con una consulta.</h3>
+        <p>Elige un escenario y observa qué ocurre con cada proveedor.</p>
+        }
+      </div>
+    </div>
+  </section>
+  <section class="closing">
+    <h2>Los hilos son ligeros.<br /><em>Las decisiones importan.</em></h2>
+    <p>
+      ¿Qué limita el sistema? ¿Cuándo conviene cancelar?<br />Encuentra el
+      razonamiento y las pruebas en el repositorio.
+    </p>
+    <a
+      href="https://github.com/LuisDeveloper-Fer/virtual-thread-orchestrator/blob/main/docs/adr/001-design.md"
+      >Leer la arquitectura ↗</a
+    >
+  </section>
+</main>
+<footer>
+  <a class="brand" href="#">trama✳</a>
+  <p>Datos ficticios · Java 21 / Spring Boot / Angular</p>
+  <a href="https://github.com/LuisDeveloper-Fer">LuisDeveloper-Fer ↗</a>
+</footer>

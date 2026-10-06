@@ -6,6 +6,12 @@
 
 [![Build](https://github.com/LuisDeveloper-Fer/virtual-thread-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/LuisDeveloper-Fer/virtual-thread-orchestrator/actions)
 
+## Demo pública
+
+[**Abrir Trama**](https://luisdeveloper-fer.github.io/virtual-thread-orchestrator/) · Simulación en navegador. No ejecuta Java ni produce mediciones de hilos. Para observar hilos reales utiliza la API local.
+
+![Trama · interfaz Angular](docs/preview.png)
+
 ## Arquitectura
 
 ```mermaid
